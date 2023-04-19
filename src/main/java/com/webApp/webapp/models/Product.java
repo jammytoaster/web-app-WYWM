@@ -3,20 +3,30 @@ package com.webApp.webapp.models;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Type;
 
+import java.util.List;
+
 @Entity(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer product_id;
-    private Integer category_id;
+    private Integer product_category_id;
     private String product_name;
     private double product_price;
     private Integer product_quantity;
     private Integer product_sold;
 
     @Lob
-    @Type(type="org.hibernate.type.BinaryType")
+//    @Type(type="org.hibernate.type.BinaryType")
     private byte[] product_image;
+
+    //Defines relationship between products and categories
+    @ManyToMany
+    @JoinTable(
+            name = "product_category",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private List<Category> categories;
 
     public Product() {
     }
@@ -29,12 +39,12 @@ public class Product {
         this.product_id = product_id;
     }
 
-    public Integer getCategory_id() {
-        return category_id;
+    public Integer getProduct_category_id() {
+        return product_category_id;
     }
 
-    public void setCategory_id(Integer category_id) {
-        this.category_id = category_id;
+    public void setProduct_category_id(Integer product_category_id) {
+        this.product_category_id = product_category_id;
     }
 
     public String getProduct_name() {
@@ -77,5 +87,11 @@ public class Product {
         this.product_image = product_image;
     }
 
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 }

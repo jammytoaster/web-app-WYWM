@@ -1,9 +1,8 @@
 package com.webApp.webapp.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity(name = "categories")
 public class Category {
@@ -11,6 +10,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer category_id;
     private Integer category_name;
+
+    @ManyToMany(mappedBy = "categories")
+    private List<Product> products;
 
     public Category() {
     }
@@ -29,5 +31,13 @@ public class Category {
 
     public void setCategory_name(Integer category_name) {
         this.category_name = category_name;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }
