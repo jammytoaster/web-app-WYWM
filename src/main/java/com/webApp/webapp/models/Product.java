@@ -8,6 +8,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer product_id;
+    private Integer category_id;
     private String product_name;
     private double product_price;
     private Integer product_quantity;
@@ -17,6 +18,8 @@ public class Product {
     @Type(type="org.hibernate.type.BinaryType")
     private byte[] product_image;
 
+    public Product() {
+    }
 
     public Integer getProduct_id() {
         return product_id;
@@ -24,6 +27,14 @@ public class Product {
 
     public void setProduct_id(Integer product_id) {
         this.product_id = product_id;
+    }
+
+    public Integer getCategory_id() {
+        return category_id;
+    }
+
+    public void setCategory_id(Integer category_id) {
+        this.category_id = category_id;
     }
 
     public String getProduct_name() {
@@ -65,8 +76,6 @@ public class Product {
     public void setProduct_image(byte[] product_image) {
         this.product_image = product_image;
     }
-
-    public Product(){
 
     }
 }
