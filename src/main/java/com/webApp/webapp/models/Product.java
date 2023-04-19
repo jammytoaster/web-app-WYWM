@@ -1,5 +1,6 @@
 package com.webApp.webapp.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Type;
 
@@ -10,7 +11,12 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long product_id;
-    private Integer product_category_id;
+
+    //Defines relationship between products and categories
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_category_id")
+    @JsonBackReference
+    private Category category;
     private String product_name;
     private Double product_price;
     private Integer product_quantity;
@@ -19,11 +25,6 @@ public class Product {
     @Lob
 //    @Type(type="org.hibernate.type.BinaryType")
     private byte[] product_image;
-
-    //Defines relationship between products and categories
-    @ManyToOne
-    @JoinColumn(name = "product_category_id")
-    private List<Category> categories;
 
     public Product() {
     }
@@ -36,12 +37,12 @@ public class Product {
         this.product_id = product_id;
     }
 
-    public Integer getProduct_category_id() {
-        return product_category_id;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setProduct_category_id(Integer product_category_id) {
-        this.product_category_id = product_category_id;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getProduct_name() {
@@ -52,11 +53,11 @@ public class Product {
         this.product_name = product_name;
     }
 
-    public double getProduct_price() {
+    public Double getProduct_price() {
         return product_price;
     }
 
-    public void setProduct_price(double product_price) {
+    public void setProduct_price(Double product_price) {
         this.product_price = product_price;
     }
 
@@ -82,13 +83,5 @@ public class Product {
 
     public void setProduct_image(byte[] product_image) {
         this.product_image = product_image;
-    }
-
-    public List<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
     }
 }

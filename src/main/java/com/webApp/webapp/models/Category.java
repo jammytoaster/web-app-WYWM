@@ -1,5 +1,6 @@
 package com.webApp.webapp.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -11,7 +12,8 @@ public class Category {
     private Long category_id;
     private String category_name;
 
-    @OneToMany(mappedBy = "categories")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Product> products;
 
     public Category() {
