@@ -9,10 +9,10 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer product_id;
+    private Long product_id;
     private Integer product_category_id;
     private String product_name;
-    private double product_price;
+    private Double product_price;
     private Integer product_quantity;
     private Integer product_sold;
 
@@ -21,21 +21,18 @@ public class Product {
     private byte[] product_image;
 
     //Defines relationship between products and categories
-    @ManyToMany
-    @JoinTable(
-            name = "product_category",
-            joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    @ManyToOne
+    @JoinColumn(name = "product_category_id")
     private List<Category> categories;
 
     public Product() {
     }
 
-    public Integer getProduct_id() {
+    public Long getProduct_id() {
         return product_id;
     }
 
-    public void setProduct_id(Integer product_id) {
+    public void setProduct_id(Long product_id) {
         this.product_id = product_id;
     }
 

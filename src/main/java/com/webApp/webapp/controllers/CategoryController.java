@@ -31,6 +31,11 @@ public class CategoryController {
         return categoryRepository.saveAndFlush(category);
     }
 
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    public void deleteCategory(@PathVariable Long id) {
+        categoryRepository.deleteById(id);
+    }
+
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public Category updateCategory(@PathVariable Long id, @RequestBody Category category) {
         Category existingCategory = categoryRepository.getOne(id);
