@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travis' Transport</title>
-    <link rel="stylesheet" type = "text/css" th:href="@{/styles/style.css}">
-</head>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Travis' Transport</title>
+      <link rel="stylesheet" type = "text/css" th:href="@{/styles/style.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+
+  </head>
   <body>
     <div class="container">
       <header class="site_header">
@@ -21,17 +26,34 @@
         </div>
         <div class="cart_button">
           <button>
-            <img src="https://cdn-icons-png.flaticon.com/512/2420/2420157.png" class="cart_button_img">
+            <img src="https://cdn-icons-png.flaticon.com/512/2420/2420157.png" alt="cart icon" class="cart_button_img">
           </button>
         </div>
       </header>
 
       <main>
-        <div class="image_slab" id="parallax">
+        <section>
+          <div class="image_slab">
+            <h1 class="image_title">Ride With Style</h1>
+            <p class="image_subtext">Lets Hit The Road</p>
+            <button class="image_button">Shop Now!</button>
+          </div>
+        </section>
+        <section>
+          <div class="categories">
+            <h3>The</h3>
+            <h2>Range</h2>
 
-        </div>
+          </div>
+        </section>
+        <section>
+          <div class="about_image_slab">
+
+          </div>
+        </section>
         <section id="products">
           <div id="product_list">
+
           </div>
         </section>
       </main>
@@ -41,50 +63,50 @@
       </footer>
     </div>
 
-  <script>
+    <script>
 
-    function createProductCard(product) {
-      const card = document.createElement("div");
-      card.classList.add("product_card");
+      function createProductCard(product) {
+        const card = document.createElement("div");
+        card.classList.add("product_card");
 
-      const image = document.createElement("img");
-      image.classList.add("product_image");
-      image.src = product.product_image;
-      image.alt = "Image is: " + product.product_name;
-      card.appendChild(image);
+        const image = document.createElement("img");
+        image.classList.add("product_image");
+        image.src = product.product_image;
+        image.alt = "Image is: " + product.product_name;
+        card.appendChild(image);
 
-      const name = document.createElement("h3");
-      name.textContent = product.product_name;
-      card.appendChild(name);
+        const name = document.createElement("h3");
+        name.textContent = product.product_name;
+        card.appendChild(name);
 
-      const price = document.createElement("p");
-      price.textContent = "Price: £"+product.product_price;
-      card.appendChild(price);
+        const price = document.createElement("p");
+        price.textContent = "Price: £"+product.product_price;
+        card.appendChild(price);
 
-      return card;
-  }
+        return card;
+    }
 
-  function displayProducts(products) {
+    function displayProducts(products) {
 
-      const productList = document.getElementById("product_list");
-      products.forEach((product) => {
-          const productCard = createProductCard(product);
-          productList.appendChild(productCard);
-      });
-  }
+        const productList = document.getElementById("product_list");
+        products.forEach((product) => {
+            const productCard = createProductCard(product);
+            productList.appendChild(productCard);
+        });
+    }
 
-  fetch("/api/products").then((response) => {
-      if (!response.ok) {
-          throw new Error("Could not make network response");
-      }
-      return response.json();
-      })
-      .then((products) => {
-          displayProducts(products);
-      })
-      .catch((error) => {
-          console.error("There was an issue when trying to fetch API: ", error);
-      });
-  </script>
+    fetch("/api/products").then((response) => {
+        if (!response.ok) {
+            throw new Error("Could not make network response");
+        }
+        return response.json();
+        })
+        .then((products) => {
+            displayProducts(products);
+        })
+        .catch((error) => {
+            console.error("There was an issue when trying to fetch API: ", error);
+        });
+    </script>
   </body>
 </html>
