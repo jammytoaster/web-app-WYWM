@@ -1,31 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travis' Transport</title>
+    <link rel="stylesheet" type = "text/css" th:href="@{/styles/style.css}">
 </head>
   <body>
-    <header>
-      <nav>
-        <a href="#products">Products</a>
-        <a href="#about">About Us</a>
-        <a href="#contact">Contact Us</a>
-      </nav>
-    </header>
-
-    <main>
-      <section id="products">
-        <div id="product_list">
+    <div class="container">
+      <header class="site_header">
+        <img src="https://cdn.pixabay.com/photo/2014/04/02/10/25/high-wheel-bicycle-303797__480.png" alt="logo" class="header_logo">
+        <div class="nav_bar">
+          <div class="desktop_nav">
+            <nav class="nav">
+              <a href="#products" class="nav_options">Products</a>
+              <a href="#about" class="nav_options nav_options_margin">About</a>
+              <a href="#contact" class="nav_options nav_options_margin">Contact</a>
+            </nav>
+          </div>
         </div>
-      </section>
-    </main>
+        <div class="cart_button">
+          <button>
+            <img src="https://cdn-icons-png.flaticon.com/512/2420/2420157.png" class="cart_button_img">
+          </button>
+        </div>
+      </header>
 
-    <footer>
+      <main>
+        <div class="image_slab" id="parallax">
 
-    </footer>
+        </div>
+        <section id="products">
+          <div id="product_list">
+          </div>
+        </section>
+      </main>
 
+      <footer>
 
-  <script src="script.js"></script>
+      </footer>
+    </div>
+
+  <script>
+
+    function createProductCard(product) {
+      const card = document.createElement("div");
+      card.classList.add("product_card");
+
+      const image = document.createElement("img");
+      image.classList.add("product_image");
+      image.src = product.product_image;
+      image.alt = "Image is: " + product.product_name;
+      card.appendChild(image);
+
+      const name = document.createElement("h3");
+      name.textContent = product.product_name;
+      card.appendChild(name);
+
+      const price = document.createElement("p");
+      price.textContent = "Price: £"+product.product_price;
+      card.appendChild(price);
+
+      return card;
+  }
+
+  function displayProducts(products) {
+
+      const productList = document.getElementById("product_list");
+      products.forEach((product) => {
+          const productCard = createProductCard(product);
+          productList.appendChild(productCard);
+      });
+  }
+
+  fetch("/api/products").then((response) => {
+      if (!response.ok) {
+          throw new Error("Could not make network response");
+      }
+      return response.json();
+      })
+      .then((products) => {
+          displayProducts(products);
+      })
+      .catch((error) => {
+          console.error("There was an issue when trying to fetch API: ", error);
+      });
+  </script>
   </body>
 </html>

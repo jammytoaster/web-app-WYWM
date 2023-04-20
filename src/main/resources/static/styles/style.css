@@ -1,0 +1,64 @@
+/*Reset default styles*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/*Header and Nav icons*/
+
+.site_header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 16px 0;
+}
+
+.header_logo {
+    height: 7rem;
+}
+
+.cart_button_img {
+    height: 3rem;
+    border: none;
+    cursor: pointer;
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav_options {
+    font-size: 1.5em;
+    text-decoration: none;
+    font-family: Helvetica;
+    color: #363636;
+    margin-top: 65px;
+    font-weight: bold;
+}
+
+.nav_options:hover{
+    color: #545454;
+}
+
+.nav_options_margin {
+    margin-left: 6%;
+}
+
+/*Image hero with text*/
+
+.image_slab {
+    flex: 0;
+    width: 100%;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-size: cover;
+    justify-content: center;
+    background-position: center;
+    background-image: url("https://www.canyon.com/dw/image/v2/BCML_PRD/on/demandware.static/-/Library-Sites-canyon-shared/default/dwa0ab57e8/images/plp/E-Bike/Grand_Canyon_ON/canyon-grand-canyon-on-06-my22.jpg?sw=1920");
+    background-attachment: fixed;
+}
