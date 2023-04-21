@@ -1,112 +1,78 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Travis' Transport</title>
-      <link rel="stylesheet" type = "text/css" th:href="@{/styles/style.css}">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aperture Enterprises</title>
+    <link rel="stylesheet" type = "text/css" th:href="@{/styles/style.css}">
 
   </head>
   <body>
     <div class="container">
       <header class="site_header">
-        <img src="https://cdn.pixabay.com/photo/2014/04/02/10/25/high-wheel-bicycle-303797__480.png" alt="logo" class="header_logo">
-        <div class="nav_bar">
-          <div class="desktop_nav">
-            <nav class="nav">
-              <a href="#products" class="nav_options">Products</a>
-              <a href="#about" class="nav_options nav_options_margin">About</a>
-              <a href="#contact" class="nav_options nav_options_margin">Contact</a>
-            </nav>
-          </div>
-        </div>
-        <div class="cart_button">
-          <button>
-            <img src="https://cdn-icons-png.flaticon.com/512/2420/2420157.png" alt="cart icon" class="cart_button_img">
-          </button>
-        </div>
+
       </header>
 
       <main>
         <section>
-          <div class="image_slab">
-            <h1 class="image_title">Ride With Style</h1>
-            <p class="image_subtext">Lets Hit The Road</p>
-            <button class="image_button">Shop Now!</button>
-          </div>
-        </section>
-        <section>
-          <div class="categories">
-            <h3>The</h3>
-            <h2>Range</h2>
-
-          </div>
-        </section>
-        <section>
-          <div class="about_image_slab">
-
-          </div>
-        </section>
-        <section id="products">
-          <div id="product_list">
-
-          </div>
+          <table id="product_table">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Sold</th>
+              <th>Image</th>
+            </tr>
+          </table>
         </section>
       </main>
-
-      <footer>
-
-      </footer>
     </div>
 
     <script>
 
-      function createProductCard(product) {
-        const card = document.createElement("div");
-        card.classList.add("product_card");
+      function addProductTable(product) {
+        const table = document.getElementById("product_table");
+        const row = table.insertRow(-1);
+        row.className = product.productQuantity < 6 ? "low_stock" : "";
+
+        const id = row.insertCell(0);
+        const name = row.insertCell(1);
+        const price = row.insertCell(2);
+        const quantity = row.insertCell(3);
+        const sold = row.insertCell(4);
+        const imageCell = row.insertCell(5);
+
+        id.textContent = product.product_id;
+        name.textContent =  product.product_name;
+        price.textContent = product.product_price;
+        quantity.textContent = product.product_quantity;
+        sold.textContent = product.product_sold;
 
         const image = document.createElement("img");
-        image.classList.add("product_image");
         image.src = product.product_image;
-        image.alt = "Image is: " + product.product_name;
-        card.appendChild(image);
+        image.width = 100;
+        image.height = 100;
+        imageCell.appendChild(image);
+      }
 
-        const name = document.createElement("h3");
-        name.textContent = product.product_name;
-        card.appendChild(name);
 
-        const price = document.createElement("p");
-        price.textContent = "Price: £"+product.product_price;
-        card.appendChild(price);
 
-        return card;
-    }
-
-    function displayProducts(products) {
-
-        const productList = document.getElementById("product_list");
-        products.forEach((product) => {
-            const productCard = createProductCard(product);
-            productList.appendChild(productCard);
-        });
-    }
-
-    fetch("/api/products").then((response) => {
+      fetch("/api/products").then((response) => {
         if (!response.ok) {
-            throw new Error("Could not make network response");
+          throw new Error("Could not make network response");
         }
         return response.json();
         })
         .then((products) => {
-            displayProducts(products);
+          products.forEach((product) => {
+            addProductTable(product);
+          });
         })
         .catch((error) => {
-            console.error("There was an issue when trying to fetch API: ", error);
+          console.error("There was an issue when trying to fetch API: ", error);
         });
+
     </script>
   </body>
 </html>
