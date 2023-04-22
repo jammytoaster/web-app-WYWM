@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,52 +26,176 @@
             </tr>
           </table>
         </section>
+        <section>
+          <div class="crud">
+            <form id="create_prod" class="create_prod">
+              <label>Category Name:</label>
+              <input type="text" id="category_name" name="category_name" placeholder="Bike">
+
+              <input type="hidden" id="product_category_id">
+
+              <label>Product Name:</label>
+              <input type="text" id="product_name" name="product_name" placeholder="BigWheel" required>
+
+              <label>Product Price:</label>
+              <input type="number" id="product_price" name="product_price" step=".01" placeholder="0.00" required>
+
+              <label>Product Quantity:</label>
+              <input type="number" id="product_quantity" name="product_quantity" placeholder="0" required>
+
+              <label>Product Sold:</label>
+              <input type="number" id="product_sold" name="product_sold" placeholder="0" required>
+
+              <label>Product Image URL:</label>
+              <input type="url" id="product_image" name="product_image" placeholder="https://image.com">
+
+              <button id="create_item" type="submit">Create Item for Table</button>
+            </form>
+
+            <div>
+              <button id="delete_item">Delete Item in Table</button>
+            </div>
+            <div>
+              <button id="update_item">Update Item in Table</button>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
 
     <script>
 
-      function addProductTable(product) {
-        const table = document.getElementById("product_table");
-        const row = table.insertRow(-1);
-        row.className = product.productQuantity < 6 ? "low_stock" : "";
+    function addProductTable(product) {
+      const table = document.getElementById("product_table");
+      const row = table.insertRow(-1);
+      row.className = product.product_quantity < 6 ? "low_stock" : "";
 
-        const id = row.insertCell(0);
-        const name = row.insertCell(1);
-        const price = row.insertCell(2);
-        const quantity = row.insertCell(3);
-        const sold = row.insertCell(4);
-        const imageCell = row.insertCell(5);
+      const id = row.insertCell(0);
+      const name = row.insertCell(1);
+      const price = row.insertCell(2);
+      const quantity = row.insertCell(3);
+      const sold = row.insertCell(4);
+      const imageCell = row.insertCell(5);
 
-        id.textContent = product.product_id;
-        name.textContent =  product.product_name;
-        price.textContent = product.product_price;
-        quantity.textContent = product.product_quantity;
-        sold.textContent = product.product_sold;
+      id.textContent = product.product_id;
+      name.textContent =  product.product_name;
+      price.textContent = product.product_price;
+      quantity.textContent = product.product_quantity;
+      sold.textContent = product.product_sold;
 
-        const image = document.createElement("img");
-        image.src = product.product_image;
-        image.width = 100;
-        image.height = 100;
-        imageCell.appendChild(image);
+      const image = document.createElement("img");
+      image.src = product.product_image;
+      image.width = 100;
+      image.height = 100;
+      imageCell.appendChild(image);
+    }
+
+    fetch("/api/products").then((response) => {
+      if (!response.ok) {
+        throw new Error("Could not make network response");
+      }
+      return response.json();
+      })
+      .then((products) => {
+        products.forEach((product) => {
+          addProductTable(product);
+        });
+      })
+      .catch((error) => {
+        console.error("There was an issue when trying to fetch API: ", error);
+      });
+
+
+    <!---//Create Item method---->
+
+    document.addEventListener("DOMContentLoaded", () => {
+      async function checkCategory(category_name) {
+         try {
+            const response = await fetch("/api/categories");
+         if (!response.ok) {
+            throw new Error("Could not make network response");
+         }
+         const categories = await response.json();
+
+         let existingCategory = categories.find(
+           (category) => category.category_name === category_name
+         );
+
+         if (existingCategory) {
+           document.getElementById("product_category_id").value = existingCategory.category_id;
+         }
+         else {
+           console.log("bananna")
+           const newCategory = { category_name: category_name };
+           const addCategoryResponse = await fetch("/api/categories", {
+             method: "POST",
+             headers: {
+               "Content-Type": "application/json",
+             },
+             body: JSON.stringify(newCategory),
+           });
+
+           if (!addCategoryResponse.ok) {
+             throw new Error("Unable to save new category");
+           }
+
+           const addedCategory = await addCategoryResponse.json();
+           document.getElementById("product_category_id").value = addedCategory.category_id;
+         }
+      } catch (error) {
+         console.error("There was an issue when trying to fetch API: ", error);
+         }
       }
 
+      document.getElementById("create_prod").addEventListener("submit", async (e) => {
+        e.preventDefault();
 
+        const category_name = document.getElementById("category_name").value;
+        await checkCategory(category_name);
 
-      fetch("/api/products").then((response) => {
-        if (!response.ok) {
-          throw new Error("Could not make network response");
-        }
-        return response.json();
+        const prodTable = document.getElementById("product_table");
+        const nextId = prodTable.rows.length;
+
+        const productCategoryVal = parseInt(document.getElementById("product_category_id").value);
+
+        const prod = {
+          product_id: nextId,
+          category: {
+            category_id: productCategoryVal,
+            category_name: category_name,
+          },
+          product_name: document.getElementById("product_name").value,
+          product_price: parseFloat(document.getElementById("product_price").value),
+          product_quantity: parseInt(document.getElementById("product_quantity").value),
+          product_sold: parseInt(document.getElementById("product_sold").value),
+          product_image: document.getElementById("product_image").value,
+        };
+
+        console.log(prod)
+
+        fetch("/api/products", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(prod),
         })
-        .then((products) => {
-          products.forEach((product) => {
-            addProductTable(product);
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Unable to save data");
+            }
+            return response.json();
+          })
+          .then((saveProduct) => {
+            addProductTable(saveProduct);
+            document.getElementById("create_prod").reset();
+          })
+          .catch((error) => {
+            console.error("There was an error when trying to save product");
           });
-        })
-        .catch((error) => {
-          console.error("There was an issue when trying to fetch API: ", error);
         });
+      });
+
 
     </script>
   </body>

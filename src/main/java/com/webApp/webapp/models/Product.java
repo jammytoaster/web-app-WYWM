@@ -23,10 +23,7 @@ public class Product {
     private Double product_price;
     private Integer product_quantity;
     private Integer product_sold;
-
-    @Lob
-//    @Type(type="org.hibernate.type.BinaryType")
-    private byte[] product_image;
+    private String product_image;
 
     public Product() {
     }
@@ -79,11 +76,11 @@ public class Product {
         this.product_sold = product_sold;
     }
 
-    public byte[] getProduct_image() {
+    public String getProduct_image() {
         return product_image;
     }
 
-    public void setProduct_image(byte[] product_image) {
+    public void setProduct_image(String product_image) {
         this.product_image = product_image;
     }
 }

@@ -5,7 +5,7 @@
   box-sizing: border-box;
 }
 
-/*Header and Nav icons*/
+/*Header*/
 
 .site_header {
     display: flex;
@@ -15,5 +15,23 @@
 }
 
 .low_stock {
-    background-color: red;
+    background-color: #cf7070;
+}
+
+/*CRUD buttons and inputs*/
+
+.crud {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 16px 0;
+}
+
+.create_prod {
+    display: flex;
+    flex-direction: column;
+}
+
+.create_prod input {
+    margin-bottom: 10px;
 }
