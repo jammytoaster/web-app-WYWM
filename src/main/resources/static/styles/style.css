@@ -44,3 +44,12 @@
 .delete_prod input {
     margin-bottom: 10px;
 }
+
+.update_prod {
+    display: flex;
+    flex-direction: column;
+}
+
+.update_prod input {
+    margin-bottom: 10px;
+}
