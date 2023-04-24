@@ -30,7 +30,7 @@ public class ProductController {
         return productRepository.saveAndFlush(product);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteProduct(@PathVariable Long id) {
         productRepository.deleteById(id);
     }

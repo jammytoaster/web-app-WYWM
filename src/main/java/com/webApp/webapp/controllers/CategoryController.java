@@ -31,7 +31,7 @@ public class CategoryController {
         return categoryRepository.saveAndFlush(category);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteCategory(@PathVariable Long id) {
         categoryRepository.deleteById(id);
     }

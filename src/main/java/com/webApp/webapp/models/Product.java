@@ -14,7 +14,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long product_id;
 
-    //Defines relationship between products and categories
+    // Defines relationship between products and categories, this allows multiple products to be associated with a category
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_category_id")
     @JsonBackReference

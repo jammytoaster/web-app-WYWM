@@ -35,3 +35,12 @@
 .create_prod input {
     margin-bottom: 10px;
 }
+
+.delete_prod {
+    display: flex;
+    flex-direction: column;
+}
+
+.delete_prod input {
+    margin-bottom: 10px;
+}
