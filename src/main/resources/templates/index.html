@@ -368,15 +368,18 @@
     document.getElementById("update_prod").addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      <!------// Fetches the row with the users input ID------>
       try {
         const ID = parseInt(document.getElementById("update_id").value);
         const findItem = await fetch(`/api/products/${ID}`);
 
+        <!------// If found product is added to update_prod_input table----->
         if (findItem.ok) {
           const product = await findItem.json();
 
           addProductUpdateTable(product);
 
+          <!-------// Runs show input method to make hidden inputs, labels, and buttons visible and required------->
           showInputs();
         }
       }
@@ -395,11 +398,14 @@
 
       const ID = parseInt(document.getElementById("update_id").value);
 
+      <!-----// Gets the categories name and runs the checkCategory function, finding an existing category or creating a new one------>
       update_category_name = document.getElementById("update_category_name").value;
       await checkCategory(update_category_name);
 
+      <!-------// Gets category id produced by the checkCategory function------->
       const productCategoryVal = parseInt(document.getElementById("product_category_id").value);
 
+      <!------// Gets input information and adds it to variable------->
       const updatedProduct = {
         category: {
           category_id: productCategoryVal,
@@ -413,6 +419,7 @@
       };
 
       try {
+        <!-----// Updates the product with the users data------>
         const response = await fetch(`/api/products/${ID}`, {
           method: "PUT",
           headers: {
@@ -423,13 +430,20 @@
 
         if (response.ok) {
           console.log("Product updated");
+
+          <!------// Empties forms input values------->
           document.getElementById("update_prod").reset();
           document.getElementById("update_prod_input").reset();
           document.getElementById("create_prod").reset();
 
+          <!------// Empties update table------>
           const table = document.getElementById("update_product_table");
           table.innerHTML = "";
+
+          <!------// Runs hide input function, hiding the unhidden values------>
           hideInputs();
+
+          <!-----// Refreshes the main table------>
           updateTable();
         }
       }
