@@ -53,3 +53,12 @@
 .update_prod input {
     margin-bottom: 10px;
 }
+
+.update_prod_input {
+    display: flex;
+    flex-display: column;
+}
+
+.update_prod_input {
+    margin-bottom: 10px;
+}

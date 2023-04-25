@@ -35,7 +35,7 @@ public class ProductController {
         productRepository.deleteById(id);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
         Product existingProduct = productRepository.getOne(id);
         //copies desired properties over and ignores certain ones such as the ID which will always be the same
