@@ -59,6 +59,15 @@
     flex-direction: column;
 }
 
-.update_prod_input {
+.update_prod_input input {
+    margin-bottom: 10px;
+}
+
+.category_find_prod {
+    display: flex;
+    flex-direction: column;
+}
+
+.category_find_prod input {
     margin-bottom: 10px;
 }

@@ -113,6 +113,9 @@
                 </form>
               </div>
             </div>
+            <form id="category_find_prod" class="category_find_prod">
+              <button id="category_find">Find items in category</button>
+            </form>
           </div>
         </section>
       </main>
@@ -208,103 +211,102 @@
 
 
     <!---// Create Item method---->
-    document.addEventListener("DOMContentLoaded", () => {
-      async function checkCategory(category_name) {
-        try {
 
-        <!-------// Gets categories from category database-------->
-          const response = await fetch("/api/categories");
-          if (!response.ok) {
-             throw new Error("Could not make network response");
-          }
-          const categories = await response.json();
+    async function checkCategory(category_name) {
+      try {
 
-          <!-------// Searches the database Array to see if the category name input by the user is present in the database------->
-          let existingCategory = categories.find(
-            (category) => category.category_name === category_name
-          );
+      <!-------// Gets categories from category database-------->
+        const response = await fetch("/api/categories");
+        if (!response.ok) {
+           throw new Error("Could not make network response");
+        }
+        const categories = await response.json();
 
-          <!-----// If the category name is present in the database, add the categories ID to the product_category_id input----->
-          if (existingCategory) {
-            document.getElementById("product_category_id").value = existingCategory.category_id;
-          }
+        <!-------// Searches the database Array to see if the category name input by the user is present in the database------->
+        let existingCategory = categories.find((category) => category.category_name === category_name);
 
-          <!-----// If the category name is not present in the database, add the category name to newCategory----->
-          else {
-            const newCategory = { category_name: category_name };
-
-            <!------// Fetch categories and adds the newCategory to the database------>
-            const addCategoryResponse = await fetch("/api/categories", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(newCategory),
-            });
-
-            if (!addCategoryResponse.ok) {
-              throw new Error("Unable to save new category");
-            }
-
-            const addedCategory = await addCategoryResponse.json();
-            document.getElementById("product_category_id").value = addedCategory.category_id;
-          }
-        } catch (error) {
-          console.error("There was an issue when trying to fetch API: ", error);
-          }
+        <!-----// If the category name is present in the database, add the categories ID to the product_category_id input----->
+        if (existingCategory) {
+          document.getElementById("product_category_id").value = existingCategory.category_id;
         }
 
-      <!------// Create button------>
-      document.getElementById("create_prod").addEventListener("submit", async (e) => {
-        e.preventDefault();
+        <!-----// If the category name is not present in the database, add the category name to newCategory----->
+        else {
+          const newCategory = { category_name: category_name };
 
-        <!-----// Adds the category_name to the checkCategory function----->
-        const category_name = document.getElementById("category_name").value;
-        await checkCategory(category_name);
-
-        <!-----// Gets the product_category_id and turns it to an integer----->
-        const productCategoryVal = parseInt(document.getElementById("product_category_id").value);
-
-        <!-----// Adds the input items to the database----->
-        const prod = {
-          category: {
-            category_id: productCategoryVal,
-            category_name: category_name,
-          },
-          product_name: document.getElementById("product_name").value,
-          product_price: parseFloat(document.getElementById("product_price").value),
-          product_quantity: parseInt(document.getElementById("product_quantity").value),
-          product_sold: parseInt(document.getElementById("product_sold").value),
-          product_image: document.getElementById("product_image").value,
-        };
-
-        console.log(prod)
-
-        <!------// Fetches the products database and adds the items to it------>
-        fetch("/api/products", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(prod),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Unable to save data");
-            }
-            return response.json();
-          })
-
-          <!-----// Adds the new product to the addProductTable function to add row to the table, then resets the fields----->
-          .then((saveProduct) => {
-            addProductTable(saveProduct);
-            document.getElementById("create_prod").reset();
-          })
-          .catch((error) => {
-            console.error("There was an error when trying to save product");
+          <!------// Fetch categories and adds the newCategory to the database------>
+          const addCategoryResponse = await fetch("/api/categories", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newCategory),
           });
+
+          if (!addCategoryResponse.ok) {
+            throw new Error("Unable to save new category");
+          }
+
+          const addedCategory = await addCategoryResponse.json();
+          document.getElementById("product_category_id").value = addedCategory.category_id;
+        }
+      }
+      catch (error) {
+        console.error("There was an issue when trying to fetch API: ", error);
+        }
+      }
+
+    <!------// Create button------>
+    document.getElementById("create_prod").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      <!-----// Adds the category_name to the checkCategory function----->
+      const category_name = document.getElementById("category_name").value;
+      await checkCategory(category_name);
+
+      <!-----// Gets the product_category_id and turns it to an integer----->
+      const productCategoryVal = parseInt(document.getElementById("product_category_id").value);
+
+      <!-----// Adds the input items to the database----->
+      const prod = {
+        category: {
+          category_id: productCategoryVal,
+          category_name: category_name,
+        },
+        product_name: document.getElementById("product_name").value,
+        product_price: parseFloat(document.getElementById("product_price").value),
+        product_quantity: parseInt(document.getElementById("product_quantity").value),
+        product_sold: parseInt(document.getElementById("product_sold").value),
+        product_image: document.getElementById("product_image").value,
+      };
+
+      console.log(prod)
+
+      <!------// Fetches the products database and adds the items to it------>
+      fetch("/api/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(prod),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Unable to save data");
+          }
+          return response.json();
+        })
+
+        <!-----// Adds the new product to the addProductTable function to add row to the table, then resets the fields----->
+        .then((saveProduct) => {
+          addProductTable(saveProduct);
+          document.getElementById("create_prod").reset();
+        })
+        .catch((error) => {
+          console.error("There was an error when trying to save product");
         });
       });
+
 
 
     <!------// Delete item Method------->
@@ -361,7 +363,7 @@
     });
 
 
-    <!------// Update item method------->
+    <!------// Update item get ID method------->
 
     document.getElementById("update_prod").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -376,39 +378,6 @@
           addProductUpdateTable(product);
 
           showInputs();
-          update_category_name = document.getElementById("update_category_name").value;
-          checkCategory(update_category_name);
-
-          const productCategoryVal = parseInt(document.getElementById("update_product_category_id").value);
-
-          const updatedProduct = {
-            category: {
-              category_id: productCategoryVal,
-              category_name: update_category_name,
-            },
-            product_name: document.getElementById("update_product_name").value,
-            product_price: document.getElementById("update_product_price").value,
-            product_quantity: document.getElementById("update_product_quantity").value,
-            product_sold: document.getElementById("update_product_sold").value,
-            product_image: document.getElementById("update_product_image").value,
-          };
-
-          try {
-            const response = await fetch(`/api/products/${ID}`, {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            body: JSON.stringify(updatedProduct),
-            });
-
-            if (response.ok) {
-              console.log("Product updated");
-            }
-          }
-          catch (error) {
-            console.log("Could not fetch item", error);
-          }
         }
       }
       catch (error) {
@@ -419,10 +388,55 @@
     });
 
 
+    <!-------// Update item update method------->
 
-    document.getElementById("update_prod").addEventListener("submit", async (e) => {
+    document.getElementById("update_prod_input").addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      const ID = parseInt(document.getElementById("update_id").value);
+
+      update_category_name = document.getElementById("update_category_name").value;
+      await checkCategory(update_category_name);
+
+      const productCategoryVal = parseInt(document.getElementById("product_category_id").value);
+
+      const updatedProduct = {
+        category: {
+          category_id: productCategoryVal,
+          category_name: update_category_name,
+        },
+        product_name: document.getElementById("update_product_name").value,
+        product_price: document.getElementById("update_product_price").value,
+        product_quantity: document.getElementById("update_product_quantity").value,
+        product_sold: document.getElementById("update_product_sold").value,
+        product_image: document.getElementById("update_product_image").value,
+      };
+
+      try {
+        const response = await fetch(`/api/products/${ID}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedProduct),
+        });
+
+        if (response.ok) {
+          console.log("Product updated");
+          document.getElementById("update_prod").reset();
+          document.getElementById("update_prod_input").reset();
+          document.getElementById("create_prod").reset();
+
+          const table = document.getElementById("update_product_table");
+          table.innerHTML = "";
+          hideInputs();
+          updateTable();
+        }
+      }
+      catch (error) {
+        console.log("Could not fetch item", error);
+      }
+    });
 
     <!-----// Show inputs function----->
     function showInputs() {
@@ -455,7 +469,33 @@
 
 
     <!-----Hide inputs function----->
+    function hideInputs() {
+      document.getElementById("update_product_table").style.visibility = "hidden";
 
+      document.getElementById("update_category_name_label").style.visibility = "hidden";
+      document.getElementById("update_category_name").style.visibility = "hidden";
+      document.getElementById("update_category_name").required = false;
+
+      document.getElementById("update_product_name_label").style.visibility = "hidden";
+      document.getElementById("update_product_name").style.visibility = "hidden";
+      document.getElementById("update_product_name").required = false;
+
+      document.getElementById("update_product_price_label").style.visibility = "hidden";
+      document.getElementById("update_product_price").style.visibility = "hidden";
+      document.getElementById("update_product_price").required = false;
+
+      document.getElementById("update_product_quantity_label").style.visibility = "hidden";
+      document.getElementById("update_product_quantity").style.visibility = "hidden";
+      document.getElementById("update_product_quantity").required = false;
+
+      document.getElementById("update_product_sold_label").style.visibility = "hidden";
+      document.getElementById("update_product_sold").style.visibility = "hidden";
+      document.getElementById("update_product_sold").required = false;
+
+      document.getElementById("update_product_image_label").style.visibility = "hidden";
+      document.getElementById("update_product_image").style.visibility = "hidden";
+      document.getElementById("update_item").style.visibility = "hidden";
+    }
 
     <!-----// Table update function------>
     function updateTable() {
