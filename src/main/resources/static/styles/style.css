@@ -14,8 +14,45 @@
     padding: 16px 0;
 }
 
+.site_header a {
+    font-size: 1.1rem;
+    text-decoration: none;
+    font-family: Helvetica;
+    font-weight: bold;
+    color: #363636;
+    transition: all 0.4s ease, visibility 0s;
+
+}
+
+.site_header a:hover {
+    transition: all 0.4s ease, visibility 0s;
+    color: #7a7a7a;
+    letter-spacing: 0.24rem;
+}
+
+/*Low Stock*/
+
 .low_stock {
     background-color: #cf7070;
+}
+
+/*Table*/
+
+product_table_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product_table {
+    margin: 30px auto;
+    width: 80%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.product_table td {
+    border: 1px solid;
 }
 
 /*CRUD buttons and inputs*/
@@ -23,8 +60,14 @@
 .crud {
     display: flex;
     justify-content: space-around;
-    align-items: center;
-    padding: 16px 0;
+    align-items: flex-start;
+    padding: 26px 0;
+}
+
+/*Create Section*/
+
+.create {
+    width: 12%;
 }
 
 .create_prod {
@@ -36,13 +79,26 @@
     margin-bottom: 10px;
 }
 
+/*Delete Section*/
+
+.delete {
+    width: 12%;
+}
+
 .delete_prod {
+    top: 0;
     display: flex;
     flex-direction: column;
 }
 
 .delete_prod input {
     margin-bottom: 10px;
+}
+
+/*Update Section*/
+
+.update {
+    width: 22%;
 }
 
 .update_prod {
@@ -63,6 +119,22 @@
     margin-bottom: 10px;
 }
 
+.update_product_table {
+    text-align: center;
+    flex-direction: column;
+    border-collapse: collapse;
+}
+
+.update_product_table td {
+    border: 1px solid;
+}
+
+/*Category Section*/
+
+.category {
+    width: 22%;
+}
+
 .category_find_prod {
     display: flex;
     flex-direction: column;
@@ -70,4 +142,14 @@
 
 .category_find_prod input {
     margin-bottom: 10px;
+}
+
+.category_table {
+    text-align: center;
+    flex-direction: column;
+    border-collapse: collapse;
+}
+
+.category_table td {
+    border: 1px solid;
 }

@@ -10,21 +10,21 @@
   <body>
     <div class="container">
       <header class="site_header">
-
+        <a href="#crud">Skip to CRUD</a>
       </header>
 
       <main>
-        <section>
-          <table id="product_table">
+        <section class="product_table_container">
+          <table id="product_table" class="product_table">
             <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Sold</th>
-                <th>Image</th>
-              </tr>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Sold</th>
+              <th style="width: 10%;">Image</th>
+            </tr>
             </thead>
             <tbody id="tbody">
             <tr>
@@ -32,34 +32,61 @@
             </tbody>
           </table>
         </section>
+
         <section>
-          <div class="crud">
-            <form id="create_prod" class="create_prod">
-              <label>Category Name:</label>
-              <input type="text" id="category_name" name="category_name" placeholder="Bike">
+          <div class="crud" id="crud">
+            <div class="category">
+              <form id="category_find_prod" class="category_find_prod">
+                <label>Category ID</label>
+                <input type="number" id="category_id" name="category_id" placeholder="1" required>
 
-              <input type="hidden" id="product_category_id">
-              <input type="hidden" id="row_count_category">
+                <button id="category_find">Find items in category</button>
 
-              <label>Product Name:</label>
-              <input type="text" id="product_name" name="product_name" placeholder="BigWheel" required>
+                <table style="visibility: hidden" id="category_table" class="category_table">
+                  <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Sold</th>
+                    <th>Image</th>
+                  </tr>
+                  </thead>
+                  <tbody id="category_tbody">
+                  <tr>
+                  </tr>
+                  </tbody>
+                </table>
+              </form>
+            </div>
+            <div class="create">
+              <form id="create_prod" class="create_prod">
+                <label>Category Name:</label>
+                <input type="text" id="category_name" name="category_name" placeholder="Bike">
 
-              <label>Product Price:</label>
-              <input type="number" id="product_price" name="product_price" step=".01" placeholder="0.00" required>
+                <input type="hidden" id="product_category_id">
+                <input type="hidden" id="row_count_category">
 
-              <label>Product Quantity:</label>
-              <input type="number" id="product_quantity" name="product_quantity" placeholder="0" required>
+                <label>Product Name:</label>
+                <input type="text" id="product_name" name="product_name" placeholder="BigWheel" required>
 
-              <label>Product Sold:</label>
-              <input type="number" id="product_sold" name="product_sold" placeholder="0" required>
+                <label>Product Price:</label>
+                <input type="number" id="product_price" name="product_price" step=".01" placeholder="0.00" required>
 
-              <label>Product Image URL:</label>
-              <input type="url" id="product_image" name="product_image" placeholder="https://image.com">
+                <label>Product Quantity:</label>
+                <input type="number" id="product_quantity" name="product_quantity" placeholder="0" required>
 
-              <button id="create_item" type="submit">Create Item for Table</button>
-            </form>
+                <label>Product Sold:</label>
+                <input type="number" id="product_sold" name="product_sold" placeholder="0" required>
 
-            <div>
+                <label>Product Image URL:</label>
+                <input type="url" id="product_image" name="product_image" placeholder="https://image.com">
+
+                <button id="create_item" type="submit">Create Item for Table</button>
+              </form>
+            </div>
+            <div class="delete">
               <form id="delete_prod" class="delete_prod">
                 <label>Product ID of item to delete</label>
                 <input type="number" id="delete_id" name="delete_id" placeholder="1">
@@ -67,7 +94,7 @@
                 <button id="delete_item">Delete Item in Table</button>
               </form>
             </div>
-            <div>
+            <div class="update">
               <div>
                 <form id="update_prod" class="update_prod">
                   <label>Product ID of item to update</label>
@@ -78,7 +105,7 @@
               </div>
               <div>
                 <form id="update_prod_input" class="update_prod_input">
-                  <table style="visibility: hidden" id="update_product_table">
+                  <table style="visibility: hidden" id="update_product_table" class="update_product_table">
                     <tr>
                       <th>ID</th>
                       <th>Name</th>
@@ -113,9 +140,6 @@
                 </form>
               </div>
             </div>
-            <form id="category_find_prod" class="category_find_prod">
-              <button id="category_find">Find items in category</button>
-            </form>
           </div>
         </section>
       </main>
@@ -124,42 +148,8 @@
     <script>
 
     <!------// Add products to main table-------->
-    function addProductTable(product) {
-      const tbody = document.getElementById("product_table");
-
-      <!-------// Adds row as last row------->
-      const row = tbody.insertRow(-1);
-
-      <!-----// Adds the "low_stock" class to the row if there are less than 6 items in stock----->
-      row.className = product.product_quantity < 6 ? "low_stock" : "";
-
-      <!-----// Inserts cells to the row----->
-      const id = row.insertCell(0);
-      const name = row.insertCell(1);
-      const price = row.insertCell(2);
-      const quantity = row.insertCell(3);
-      const sold = row.insertCell(4);
-      const imageCell = row.insertCell(5);
-
-      <!-----// Adds values to the table rows----->
-      id.textContent = product.product_id;
-      name.textContent =  product.product_name;
-      price.textContent = product.product_price;
-      quantity.textContent = product.product_quantity;
-      sold.textContent = product.product_sold;
-
-      <!-----// Adds image to table, including source and image size----->
-      const image = document.createElement("img");
-      image.src = product.product_image;
-      image.width = 100;
-      image.height = 100;
-      imageCell.appendChild(image);
-    }
-
-
-    <!-------// Add products to update table-------->
-    function addProductUpdateTable(product) {
-      const table = document.getElementById("update_product_table");
+    function addProductTable(product, tableName) {
+      const table = tableName;
 
       <!-------// Adds row as last row------->
       const row = table.insertRow(-1);
@@ -185,10 +175,13 @@
       <!-----// Adds image to table, including source and image size----->
       const image = document.createElement("img");
       image.src = product.product_image;
-      image.width = 100;
-      image.height = 100;
+      image.width = 74;
+      image.height = 74;
       imageCell.appendChild(image);
     }
+
+
+
 
 
     <!-----// Gets products from database----->
@@ -202,7 +195,7 @@
       <!-----// Goes through each row in the database and adds it to the HTML table----->
       .then((products) => {
         products.forEach((product) => {
-          addProductTable(product);
+          addProductTable(product, document.getElementById("product_table"));
         });
       })
       .catch((error) => {
@@ -299,7 +292,7 @@
 
         <!-----// Adds the new product to the addProductTable function to add row to the table, then resets the fields----->
         .then((saveProduct) => {
-          addProductTable(saveProduct);
+          addProductTable(saveProduct, document.getElementById("tbody"));
           document.getElementById("create_prod").reset();
         })
         .catch((error) => {
@@ -359,7 +352,7 @@
         console.error("Error deleting product" + delete_id, error);
       }
       <!-----// Runs updateTable function to update table------>
-      updateTable();
+      await updateTable();
     });
 
 
@@ -377,7 +370,7 @@
         if (findItem.ok) {
           const product = await findItem.json();
 
-          addProductUpdateTable(product);
+          addProductTable(product, document.getElementById("update_product_table"));
 
           <!-------// Runs show input method to make hidden inputs, labels, and buttons visible and required------->
           showInputs();
@@ -444,7 +437,7 @@
           hideInputs();
 
           <!-----// Refreshes the main table------>
-          updateTable();
+          await updateTable();
         }
       }
       catch (error) {
@@ -512,11 +505,11 @@
     }
 
     <!-----// Table update function------>
-    function updateTable() {
+    async function updateTable() {
 
       <!------// Gets table body and clears it------->
-      const tbody = document.getElementById("tbody");
-      tbody.innerHTML = "";
+      const table = document.getElementById("tbody");
+      table.innerHTML = "";
 
       <!------// Fetches products from database------->
       fetch("/api/products").then((response) => {
@@ -529,7 +522,7 @@
       <!-----// Goes through each row in the database and adds it to the HTML table using the addProductTable function----->
       .then((products) => {
         products.forEach((product) => {
-          addProductTable(product);
+          addProductTable(product, document.getElementById("tbody"));
         });
       })
       .catch((error) => {
@@ -537,6 +530,32 @@
       });
     }
 
+
+    <!-----// Find item by category method----->
+    document.getElementById("category_find_prod").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      document.getElementById("category_tbody").innerHTML = "";
+
+      document.getElementById("category_table").style.visibility = "hidden"
+
+      const ID = document.getElementById("category_id").value;
+
+      try {
+
+        const categoryResponse = await fetch(`/api/categories/${ID}`);
+        if (categoryResponse.ok) {
+          const categories = await categoryResponse.json();
+          document.getElementById("category_table").style.visibility = "visible"
+          categories.products.forEach((product) => {
+            addProductTable(product, document.getElementById("category_tbody"))
+          });
+        }
+      }
+      catch (error) {
+        console.log("Error when fetching categories database", error)
+      }
+    });
 
     </script>
   </body>
