@@ -14,6 +14,7 @@ public class Category {
     private Long category_id;
     private String category_name;
 
+    // Defines relationship between category and products, this allows a category to be associated with multiple products
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Product> products;
